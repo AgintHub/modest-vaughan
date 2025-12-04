@@ -1,10 +1,48 @@
-dag_type: spec
+dag_type: stub
 description: Generated workflow from UI.
 name: build_a_chess_app
 nodes:
   add_user_interface:
     agent: false
+    code_node_type: stub
     description: Design an intuitive and user-friendly interface for the application.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass ImplementChessRulesOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ implement_chess_rules node outputs.\"\"\"\n    chess_rules_implemented: bool\
+      \ = Field(..., description=\"Whether the official chess rules have been successfully\
+      \ implemented.\")\n    rules_verification_status: str = Field(..., description=\"\
+      Status of the rules verification process using a chess reference guide.\")\n\
+      \    supported_moves: List[str] = Field(..., description=\"List of supported\
+      \ chess moves, including castling, pawn promotion, and en passant.\")\n    checkmate_conditions:\
+      \ List[str] = Field(..., description=\"List of conditions that lead to checkmate.\"\
+      )\n    implementation_notes: str = Field(..., description=\"Any additional notes\
+      \ or comments regarding the implementation of chess rules.\")\n\n\nclass DesignChessBoardOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for design_chess_board node outputs.\"\"\"\n    board_design_description:\
+      \ str = Field(..., description=\"Description of the chess board design\")\n\
+      \    key_elements: str = Field(..., description=\"List of key elements in the\
+      \ chess board design\")\n    mockup_image: str = Field(..., description=\"Mockup\
+      \ image of the chess board design (represented as a string for simplicity)\"\
+      )\n    design_meets_requirements: bool = Field(..., description=\"Whether the\
+      \ design meets the user requirements\")\n\n\nclass AddUserInterfaceOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for add_user_interface node outputs.\"\"\"\n    ui_components:\
+      \ List[str] = Field(..., description=\"List of UI components such as buttons,\
+      \ menus, and tooltips.\")\n    layout_description: str = Field(..., description=\"\
+      Brief textual description of the overall UI layout.\")\n    validation_passed:\
+      \ bool = Field(..., description=\"Whether the UI design meets UX guidelines.\"\
+      )\n    accessibility_score: int = Field(..., description=\"Accessibility score\
+      \ ranging from 0 (poor) to 100 (excellent).\")\n    user_feedback_summary: str\
+      \ = Field(..., description=\"Summary of user feedback on the UI design.\")\n\
+      \n\ndef add_user_interface(implement_chess_rules_input: ImplementChessRulesOutput,\
+      \ design_chess_board_input: DesignChessBoardOutput, **kwargs) -> AddUserInterfaceOutput:\n\
+      \    \"\"\"Design an intuitive and user-friendly interface for the application.\n\
+      \n    Args:\n        implement_chess_rules_input: Input from the 'implement_chess_rules'\
+      \ node.\n        design_chess_board_input: Input from the 'design_chess_board'\
+      \ node.\n        **kwargs: Additional keyword arguments.\n\n    Returns:\n \
+      \       AddUserInterfaceOutput: Object containing outputs for this node.\n \
+      \   \"\"\"\n    # TODO: Implement this function\n\n    # Return stub output\
+      \ with placeholder values\n    return AddUserInterfaceOutput(\n        ui_components=[],\n\
+      \        layout_description=\"\",\n        validation_passed=False,\n      \
+      \  accessibility_score=0,\n        user_feedback_summary=\"\",\n    )"
     name: add_user_interface
     nodes_depended_on:
     - implement_chess_rules
@@ -65,9 +103,35 @@ nodes:
     prompt: Design an intuitive and user-friendly interface for the chess application,
       including buttons, menus, and tooltips. Validate the design using user experience
       (UX) guidelines.
+    shims: []
   choose_chess_engine:
     agent: false
+    code_node_type: stub
     description: Select a reliable chess engine for the application.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass GatherUserRequirementsOutput(BaseModel):\n    \"\"\"Pydantic model\
+      \ for gather_user_requirements node outputs.\"\"\"\n    required_features: List[str]\
+      \ = Field(..., description=\"List of the top 5 required features for the chess\
+      \ application\")\n    feature_priorities: List[int] = Field(..., description=\"\
+      List of priorities for each feature, with 1 being the highest priority\")\n\
+      \    user_feedback_summary: str = Field(..., description=\"Summary of user feedback\
+      \ and reviews analyzed to determine required features\")\n\n\nclass ChooseChessEngineOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for choose_chess_engine node outputs.\"\"\"\n    chosen_engine:\
+      \ str = Field(..., description=\"The name of the selected chess engine\")\n\
+      \    key_features: List[str] = Field(..., description=\"A list of key features\
+      \ supported by the chosen chess engine\")\n    supported_features: List[bool]\
+      \ = Field(..., description=\"A list of boolean values indicating whether each\
+      \ of the required features is supported by the chosen engine\")\n    engine_rating:\
+      \ int = Field(..., description=\"The Elo rating of the chosen chess engine\"\
+      )\n\n\ndef choose_chess_engine(gather_user_requirements_input: GatherUserRequirementsOutput,\
+      \ **kwargs) -> ChooseChessEngineOutput:\n    \"\"\"Select a reliable chess engine\
+      \ for the application.\n\n    Args:\n        gather_user_requirements_input:\
+      \ Input from the 'gather_user_requirements' node.\n        **kwargs: Additional\
+      \ keyword arguments.\n\n    Returns:\n        ChooseChessEngineOutput: Object\
+      \ containing outputs for this node.\n    \"\"\"\n    # TODO: Implement this\
+      \ function\n\n    # Return stub output with placeholder values\n    return ChooseChessEngineOutput(\n\
+      \        chosen_engine=\"\",\n        key_features=[],\n        supported_features=[],\n\
+      \        engine_rating=0,\n    )"
     name: choose_chess_engine
     nodes_depended_on:
     - gather_user_requirements
@@ -125,9 +189,51 @@ nodes:
     prompt: Using the gathered user requirements, research and select a reliable chess
       engine that supports the necessary features. List the chosen engine and its
       key features.
+    shims: []
   deploy_chess_application:
     agent: false
+    code_node_type: stub
     description: Publish the chess application to a target platform.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass DocumentChessApplicationOutput(BaseModel):\n    \"\"\"Pydantic model\
+      \ for document_chess_application node outputs.\"\"\"\n    user_manual_sections:\
+      \ List[str] = Field(..., description=\"Sections included in the user manual,\
+      \ such as Setup, Rules, Features, FAQ.\")\n    api_endpoints: List[str] = Field(...,\
+      \ description=\"List of API endpoints with their HTTP methods.\")\n    manual_version:\
+      \ str = Field(..., description=\"Version identifier of the user manual.\")\n\
+      \    api_version: str = Field(..., description=\"Version identifier of the API\
+      \ documentation.\")\n    is_manual_complete: bool = Field(..., description=\"\
+      Whether the user manual has been fully written.\")\n    is_api_documented: bool\
+      \ = Field(..., description=\"Whether the API documentation has been fully written.\"\
+      )\n\n\nclass TestChessApplicationOutput(BaseModel):\n    \"\"\"Pydantic model\
+      \ for test_chess_application node outputs.\"\"\"\n    test_passed: bool = Field(...,\
+      \ description=\"True if all tests pass without critical failures; otherwise\
+      \ false.\")\n    total_tests_run: int = Field(..., description=\"Total number\
+      \ of individual test cases executed.\")\n    failed_test_names: List[str] =\
+      \ Field(..., description=\"List of names or identifiers of test cases that failed.\"\
+      )\n    bug_count: int = Field(..., description=\"Number of bugs or inconsistencies\
+      \ discovered during testing.\")\n    test_summary: str = Field(..., description=\"\
+      Brief textual summary of testing results, including key findings and recommendations.\"\
+      )\n\n\nclass DeployChessApplicationOutput(BaseModel):\n    \"\"\"Pydantic model\
+      \ for deploy_chess_application node outputs.\"\"\"\n    deployment_status: bool\
+      \ = Field(..., description=\"Whether the deployment was successful\")\n    platform:\
+      \ str = Field(..., description=\"The target platform where the application was\
+      \ deployed\")\n    application_id: str = Field(..., description=\"The unique\
+      \ identifier of the deployed application\")\n    test_results: bool = Field(...,\
+      \ description=\"List of test results for the application on the chosen platform\"\
+      )\n    documentation_url: str = Field(..., description=\"The URL of the user\
+      \ manual and API documentation for the chess application\")\n\n\ndef deploy_chess_application(document_chess_application_input:\
+      \ DocumentChessApplicationOutput, test_chess_application_input: TestChessApplicationOutput,\
+      \ **kwargs) -> DeployChessApplicationOutput:\n    \"\"\"Publish the chess application\
+      \ to a target platform.\n\n    Args:\n        document_chess_application_input:\
+      \ Input from the 'document_chess_application' node.\n        test_chess_application_input:\
+      \ Input from the 'test_chess_application' node.\n        **kwargs: Additional\
+      \ keyword arguments.\n\n    Returns:\n        DeployChessApplicationOutput:\
+      \ Object containing outputs for this node.\n    \"\"\"\n    # TODO: Implement\
+      \ this function\n\n    # Return stub output with placeholder values\n    return\
+      \ DeployChessApplicationOutput(\n        deployment_status=False,\n        platform=\"\
+      \",\n        application_id=\"\",\n        test_results=False,\n        documentation_url=\"\
+      \",\n    )"
     name: deploy_chess_application
     nodes_depended_on:
     - document_chess_application
@@ -206,9 +312,35 @@ nodes:
     prompt: Deploy the chess application to a target platform, such as a mobile app
       store, desktop market, or web hosting service. Verify the correct functioning
       of the application on the chosen platform.
+    shims: []
   design_chess_board:
     agent: false
+    code_node_type: stub
     description: Create a visually appealing chess board design.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass ChooseChessEngineOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ choose_chess_engine node outputs.\"\"\"\n    chosen_engine: str = Field(...,\
+      \ description=\"The name of the selected chess engine\")\n    key_features:\
+      \ List[str] = Field(..., description=\"A list of key features supported by the\
+      \ chosen chess engine\")\n    supported_features: List[bool] = Field(..., description=\"\
+      A list of boolean values indicating whether each of the required features is\
+      \ supported by the chosen engine\")\n    engine_rating: int = Field(..., description=\"\
+      The Elo rating of the chosen chess engine\")\n\n\nclass DesignChessBoardOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for design_chess_board node outputs.\"\"\"\n    board_design_description:\
+      \ str = Field(..., description=\"Description of the chess board design\")\n\
+      \    key_elements: str = Field(..., description=\"List of key elements in the\
+      \ chess board design\")\n    mockup_image: str = Field(..., description=\"Mockup\
+      \ image of the chess board design (represented as a string for simplicity)\"\
+      )\n    design_meets_requirements: bool = Field(..., description=\"Whether the\
+      \ design meets the user requirements\")\n\n\ndef design_chess_board(choose_chess_engine_input:\
+      \ ChooseChessEngineOutput, **kwargs) -> DesignChessBoardOutput:\n    \"\"\"\
+      Create a visually appealing chess board design.\n\n    Args:\n        choose_chess_engine_input:\
+      \ Input from the 'choose_chess_engine' node.\n        **kwargs: Additional keyword\
+      \ arguments.\n\n    Returns:\n        DesignChessBoardOutput: Object containing\
+      \ outputs for this node.\n    \"\"\"\n    # TODO: Implement this function\n\n\
+      \    # Return stub output with placeholder values\n    return DesignChessBoardOutput(\n\
+      \        board_design_description=\"\",\n        key_elements=\"\",\n      \
+      \  mockup_image=\"\",\n        design_meets_requirements=False,\n    )"
     name: design_chess_board
     nodes_depended_on:
     - choose_chess_engine
@@ -267,10 +399,52 @@ nodes:
     prompt: Using the chosen chess engine, design a visually appealing chess board
       that meets the user requirements. Create a simple mockup and describe its key
       elements.
+    shims: []
   document_chess_application:
     agent: false
+    code_node_type: stub
     description: Create a comprehensive user manual and API documentation for the
       chess application.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass TestChessApplicationOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ test_chess_application node outputs.\"\"\"\n    test_passed: bool = Field(...,\
+      \ description=\"True if all tests pass without critical failures; otherwise\
+      \ false.\")\n    total_tests_run: int = Field(..., description=\"Total number\
+      \ of individual test cases executed.\")\n    failed_test_names: List[str] =\
+      \ Field(..., description=\"List of names or identifiers of test cases that failed.\"\
+      )\n    bug_count: int = Field(..., description=\"Number of bugs or inconsistencies\
+      \ discovered during testing.\")\n    test_summary: str = Field(..., description=\"\
+      Brief textual summary of testing results, including key findings and recommendations.\"\
+      )\n\n\nclass IntegrateChessEngineOutput(BaseModel):\n    \"\"\"Pydantic model\
+      \ for integrate_chess_engine node outputs.\"\"\"\n    integration_status: bool\
+      \ = Field(..., description=\"Whether the integration was successful\")\n   \
+      \ chess_engine_used: str = Field(..., description=\"The name of the chess engine\
+      \ used for integration\")\n    issues_encountered: List[str] = Field(..., description=\"\
+      List of issues encountered during integration\")\n    verification_result: bool\
+      \ = Field(..., description=\"Whether the verification of chess moves and rules\
+      \ was successful\")\n\n\nclass DocumentChessApplicationOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for document_chess_application node outputs.\"\"\"\
+      \n    user_manual_sections: List[str] = Field(..., description=\"Sections included\
+      \ in the user manual, such as Setup, Rules, Features, FAQ.\")\n    api_endpoints:\
+      \ List[str] = Field(..., description=\"List of API endpoints with their HTTP\
+      \ methods.\")\n    manual_version: str = Field(..., description=\"Version identifier\
+      \ of the user manual.\")\n    api_version: str = Field(..., description=\"Version\
+      \ identifier of the API documentation.\")\n    is_manual_complete: bool = Field(...,\
+      \ description=\"Whether the user manual has been fully written.\")\n    is_api_documented:\
+      \ bool = Field(..., description=\"Whether the API documentation has been fully\
+      \ written.\")\n\n\ndef document_chess_application(test_chess_application_input:\
+      \ TestChessApplicationOutput, integrate_chess_engine_input: IntegrateChessEngineOutput,\
+      \ **kwargs) -> DocumentChessApplicationOutput:\n    \"\"\"Create a comprehensive\
+      \ user manual and API documentation for the chess application.\n\n    Args:\n\
+      \        test_chess_application_input: Input from the 'test_chess_application'\
+      \ node.\n        integrate_chess_engine_input: Input from the 'integrate_chess_engine'\
+      \ node.\n        **kwargs: Additional keyword arguments.\n\n    Returns:\n \
+      \       DocumentChessApplicationOutput: Object containing outputs for this node.\n\
+      \    \"\"\"\n    # TODO: Implement this function\n\n    # Return stub output\
+      \ with placeholder values\n    return DocumentChessApplicationOutput(\n    \
+      \    user_manual_sections=[],\n        api_endpoints=[],\n        manual_version=\"\
+      \",\n        api_version=\"\",\n        is_manual_complete=False,\n        is_api_documented=False,\n\
+      \    )"
     name: document_chess_application
     nodes_depended_on:
     - test_chess_application
@@ -357,9 +531,27 @@ nodes:
     prompt: Write a comprehensive user manual that explains the usage of the chess
       application, including game setup, rules, and key features. Additionally, create
       API documentation that outlines the available functions and methods.
+    shims: []
   gather_user_requirements:
     agent: false
+    code_node_type: stub
     description: Collect user feedback and identify key features for the chess application.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass GatherUserRequirementsOutput(BaseModel):\n    \"\"\"Pydantic model\
+      \ for gather_user_requirements node outputs.\"\"\"\n    required_features: List[str]\
+      \ = Field(..., description=\"List of the top 5 required features for the chess\
+      \ application\")\n    feature_priorities: List[int] = Field(..., description=\"\
+      List of priorities for each feature, with 1 being the highest priority\")\n\
+      \    user_feedback_summary: str = Field(..., description=\"Summary of user feedback\
+      \ and reviews analyzed to determine required features\")\n\n\ndef gather_user_requirements(general_input:\
+      \ str, **kwargs) -> GatherUserRequirementsOutput:\n    \"\"\"Collect user feedback\
+      \ and identify key features for the chess application.\n\n    Args:\n      \
+      \  general_input: General input string for the root node.\n        **kwargs:\
+      \ Additional keyword arguments.\n\n    Returns:\n        GatherUserRequirementsOutput:\
+      \ Object containing outputs for this node.\n    \"\"\"\n    # TODO: Implement\
+      \ this function\n\n    # Return stub output with placeholder values\n    return\
+      \ GatherUserRequirementsOutput(\n        required_features=[],\n        feature_priorities=[],\n\
+      \        user_feedback_summary=\"\",\n    )"
     name: gather_user_requirements
     nodes_depended_on: []
     nodes_dependent_on: []
@@ -418,9 +610,47 @@ nodes:
     prompt: Based on online reviews and user feedback, gather information on desired
       features for a chess application. List the top 5 required features and prioritize
       them by importance.
+    shims: []
   implement_chess_rules:
     agent: false
+    code_node_type: stub
     description: Enforce the official chess rules and regulations.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass ChooseChessEngineOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ choose_chess_engine node outputs.\"\"\"\n    chosen_engine: str = Field(...,\
+      \ description=\"The name of the selected chess engine\")\n    key_features:\
+      \ List[str] = Field(..., description=\"A list of key features supported by the\
+      \ chosen chess engine\")\n    supported_features: List[bool] = Field(..., description=\"\
+      A list of boolean values indicating whether each of the required features is\
+      \ supported by the chosen engine\")\n    engine_rating: int = Field(..., description=\"\
+      The Elo rating of the chosen chess engine\")\n\n\nclass DesignChessBoardOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for design_chess_board node outputs.\"\"\"\n    board_design_description:\
+      \ str = Field(..., description=\"Description of the chess board design\")\n\
+      \    key_elements: str = Field(..., description=\"List of key elements in the\
+      \ chess board design\")\n    mockup_image: str = Field(..., description=\"Mockup\
+      \ image of the chess board design (represented as a string for simplicity)\"\
+      )\n    design_meets_requirements: bool = Field(..., description=\"Whether the\
+      \ design meets the user requirements\")\n\n\nclass ImplementChessRulesOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for implement_chess_rules node outputs.\"\"\"\n  \
+      \  chess_rules_implemented: bool = Field(..., description=\"Whether the official\
+      \ chess rules have been successfully implemented.\")\n    rules_verification_status:\
+      \ str = Field(..., description=\"Status of the rules verification process using\
+      \ a chess reference guide.\")\n    supported_moves: List[str] = Field(..., description=\"\
+      List of supported chess moves, including castling, pawn promotion, and en passant.\"\
+      )\n    checkmate_conditions: List[str] = Field(..., description=\"List of conditions\
+      \ that lead to checkmate.\")\n    implementation_notes: str = Field(..., description=\"\
+      Any additional notes or comments regarding the implementation of chess rules.\"\
+      )\n\n\ndef implement_chess_rules(choose_chess_engine_input: ChooseChessEngineOutput,\
+      \ design_chess_board_input: DesignChessBoardOutput, **kwargs) -> ImplementChessRulesOutput:\n\
+      \    \"\"\"Enforce the official chess rules and regulations.\n\n    Args:\n\
+      \        choose_chess_engine_input: Input from the 'choose_chess_engine' node.\n\
+      \        design_chess_board_input: Input from the 'design_chess_board' node.\n\
+      \        **kwargs: Additional keyword arguments.\n\n    Returns:\n        ImplementChessRulesOutput:\
+      \ Object containing outputs for this node.\n    \"\"\"\n    # TODO: Implement\
+      \ this function\n\n    # Return stub output with placeholder values\n    return\
+      \ ImplementChessRulesOutput(\n        chess_rules_implemented=False,\n     \
+      \   rules_verification_status=\"\",\n        supported_moves=[],\n        checkmate_conditions=[],\n\
+      \        implementation_notes=\"\",\n    )"
     name: implement_chess_rules
     nodes_depended_on:
     - choose_chess_engine
@@ -483,9 +713,46 @@ nodes:
     prompt: Implements the official chess rules and regulations, including castling,
       pawn promotion, and checkmate conditions. Verify the implementation using a
       chess reference guide.
+    shims: []
   integrate_chess_engine:
     agent: false
+    code_node_type: stub
     description: Integrate the selected chess engine with the application.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass ChooseChessEngineOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ choose_chess_engine node outputs.\"\"\"\n    chosen_engine: str = Field(...,\
+      \ description=\"The name of the selected chess engine\")\n    key_features:\
+      \ List[str] = Field(..., description=\"A list of key features supported by the\
+      \ chosen chess engine\")\n    supported_features: List[bool] = Field(..., description=\"\
+      A list of boolean values indicating whether each of the required features is\
+      \ supported by the chosen engine\")\n    engine_rating: int = Field(..., description=\"\
+      The Elo rating of the chosen chess engine\")\n\n\nclass AddUserInterfaceOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for add_user_interface node outputs.\"\"\"\n    ui_components:\
+      \ List[str] = Field(..., description=\"List of UI components such as buttons,\
+      \ menus, and tooltips.\")\n    layout_description: str = Field(..., description=\"\
+      Brief textual description of the overall UI layout.\")\n    validation_passed:\
+      \ bool = Field(..., description=\"Whether the UI design meets UX guidelines.\"\
+      )\n    accessibility_score: int = Field(..., description=\"Accessibility score\
+      \ ranging from 0 (poor) to 100 (excellent).\")\n    user_feedback_summary: str\
+      \ = Field(..., description=\"Summary of user feedback on the UI design.\")\n\
+      \n\nclass IntegrateChessEngineOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ integrate_chess_engine node outputs.\"\"\"\n    integration_status: bool =\
+      \ Field(..., description=\"Whether the integration was successful\")\n    chess_engine_used:\
+      \ str = Field(..., description=\"The name of the chess engine used for integration\"\
+      )\n    issues_encountered: List[str] = Field(..., description=\"List of issues\
+      \ encountered during integration\")\n    verification_result: bool = Field(...,\
+      \ description=\"Whether the verification of chess moves and rules was successful\"\
+      )\n\n\ndef integrate_chess_engine(choose_chess_engine_input: ChooseChessEngineOutput,\
+      \ add_user_interface_input: AddUserInterfaceOutput, **kwargs) -> IntegrateChessEngineOutput:\n\
+      \    \"\"\"Integrate the selected chess engine with the application.\n\n   \
+      \ Args:\n        choose_chess_engine_input: Input from the 'choose_chess_engine'\
+      \ node.\n        add_user_interface_input: Input from the 'add_user_interface'\
+      \ node.\n        **kwargs: Additional keyword arguments.\n\n    Returns:\n \
+      \       IntegrateChessEngineOutput: Object containing outputs for this node.\n\
+      \    \"\"\"\n    # TODO: Implement this function\n\n    # Return stub output\
+      \ with placeholder values\n    return IntegrateChessEngineOutput(\n        integration_status=False,\n\
+      \        chess_engine_used=\"\",\n        issues_encountered=[],\n        verification_result=False,\n\
+      \    )"
     name: integrate_chess_engine
     nodes_depended_on:
     - choose_chess_engine
@@ -543,9 +810,47 @@ nodes:
     prompt: Using the chosen chess engine, integrate it with the designed user interface.
       Ensure seamless interaction between the engine and the UI, and verify the correct
       functioning of chess moves and rules.
+    shims: []
   test_chess_application:
     agent: false
+    code_node_type: stub
     description: Verify the correct functioning of the chess application.
+    implementation: "from pydantic import BaseModel, Field\nfrom typing import List\n\
+      \n\nclass IntegrateChessEngineOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ integrate_chess_engine node outputs.\"\"\"\n    integration_status: bool =\
+      \ Field(..., description=\"Whether the integration was successful\")\n    chess_engine_used:\
+      \ str = Field(..., description=\"The name of the chess engine used for integration\"\
+      )\n    issues_encountered: List[str] = Field(..., description=\"List of issues\
+      \ encountered during integration\")\n    verification_result: bool = Field(...,\
+      \ description=\"Whether the verification of chess moves and rules was successful\"\
+      )\n\n\nclass AddUserInterfaceOutput(BaseModel):\n    \"\"\"Pydantic model for\
+      \ add_user_interface node outputs.\"\"\"\n    ui_components: List[str] = Field(...,\
+      \ description=\"List of UI components such as buttons, menus, and tooltips.\"\
+      )\n    layout_description: str = Field(..., description=\"Brief textual description\
+      \ of the overall UI layout.\")\n    validation_passed: bool = Field(..., description=\"\
+      Whether the UI design meets UX guidelines.\")\n    accessibility_score: int\
+      \ = Field(..., description=\"Accessibility score ranging from 0 (poor) to 100\
+      \ (excellent).\")\n    user_feedback_summary: str = Field(..., description=\"\
+      Summary of user feedback on the UI design.\")\n\n\nclass TestChessApplicationOutput(BaseModel):\n\
+      \    \"\"\"Pydantic model for test_chess_application node outputs.\"\"\"\n \
+      \   test_passed: bool = Field(..., description=\"True if all tests pass without\
+      \ critical failures; otherwise false.\")\n    total_tests_run: int = Field(...,\
+      \ description=\"Total number of individual test cases executed.\")\n    failed_test_names:\
+      \ List[str] = Field(..., description=\"List of names or identifiers of test\
+      \ cases that failed.\")\n    bug_count: int = Field(..., description=\"Number\
+      \ of bugs or inconsistencies discovered during testing.\")\n    test_summary:\
+      \ str = Field(..., description=\"Brief textual summary of testing results, including\
+      \ key findings and recommendations.\")\n\n\ndef test_chess_application(integrate_chess_engine_input:\
+      \ IntegrateChessEngineOutput, add_user_interface_input: AddUserInterfaceOutput,\
+      \ **kwargs) -> TestChessApplicationOutput:\n    \"\"\"Verify the correct functioning\
+      \ of the chess application.\n\n    Args:\n        integrate_chess_engine_input:\
+      \ Input from the 'integrate_chess_engine' node.\n        add_user_interface_input:\
+      \ Input from the 'add_user_interface' node.\n        **kwargs: Additional keyword\
+      \ arguments.\n\n    Returns:\n        TestChessApplicationOutput: Object containing\
+      \ outputs for this node.\n    \"\"\"\n    # TODO: Implement this function\n\n\
+      \    # Return stub output with placeholder values\n    return TestChessApplicationOutput(\n\
+      \        test_passed=False,\n        total_tests_run=0,\n        failed_test_names=[],\n\
+      \        bug_count=0,\n        test_summary=\"\",\n    )"
     name: test_chess_application
     nodes_depended_on:
     - integrate_chess_engine
@@ -620,3 +925,4 @@ nodes:
     prompt: Systematically test the chess application, including game setup, moves,
       checks, and draws. Identify and fix any bugs or inconsistencies found during
       testing.
+    shims: []
