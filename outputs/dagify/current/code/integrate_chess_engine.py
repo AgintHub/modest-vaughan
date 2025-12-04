@@ -83,12 +83,57 @@ def integrate_chess_engine(choose_chess_engine_input: ChooseChessEngineOutput, a
     Returns:
         IntegrateChessEngineOutput: Object containing outputs for this node.
     """
-    # TODO: Implement this function
-
-    # Return stub output with placeholder values
+    # Retrieve chosen chess engine details
+    chosen_engine: str = choose_chess_engine_input.chosen_engine
+    key_features: List[str] = choose_chess_engine_input.key_features
+    
+    # Retrieve user interface details
+    ui_components: List[str] = add_user_interface_input.ui_components
+    layout_description: str = add_user_interface_input.layout_description
+    validation_passed: bool = add_user_interface_input.validation_passed
+    
+    # Initialize integration tracking
+    issues_encountered: List[str] = []
+    
+    # Use chess engine API to integrate with UI
+    integration_successful: bool = integrate_engine_with_ui(
+        engine_name=chosen_engine,
+        engine_features=key_features,
+        ui_components=ui_components,
+        layout_description=layout_description
+    )
+    
+    # Handle integration errors and exceptions
+    if not integration_successful:
+        integration_errors: List[str] = handle_integration_errors(
+            engine=chosen_engine,
+            ui_validation=validation_passed
+        )
+        issues_encountered.extend(integration_errors)
+    
+    # Verify chess moves and rules functionality
+    verification_passed: bool = verify_chess_functionality(
+        engine_name=chosen_engine,
+        integrated_ui=ui_components
+    )
+    
+    if not verification_passed:
+        verification_issues: List[str] = analyze_verification_failures(
+            engine=chosen_engine
+        )
+        issues_encountered.extend(verification_issues)
+    
+    # Document integration process and issues
+    document_integration_process(
+        engine_name=chosen_engine,
+        integration_status=integration_successful,
+        verification_status=verification_passed,
+        issues=issues_encountered
+    )
+    
     return IntegrateChessEngineOutput(
-        integration_status=False,
-        chess_engine_used="",
-        issues_encountered=[],
-        verification_result=False,
+        integration_status=integration_successful,
+        chess_engine_used=chosen_engine,
+        issues_encountered=issues_encountered,
+        verification_result=verification_passed
     )

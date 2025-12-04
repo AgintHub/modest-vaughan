@@ -111,14 +111,71 @@ def document_chess_application(test_chess_application_input: TestChessApplicatio
     Returns:
         DocumentChessApplicationOutput: Object containing outputs for this node.
     """
-    # TODO: Implement this function
-
-    # Return stub output with placeholder values
+    # Review chess engine output to understand features and capabilities
+    engine_analysis: dict = analyze_chess_engine_features(
+        engine_name=integrate_chess_engine_input.chess_engine_used,
+        integration_status=integrate_chess_engine_input.integration_status,
+        verification_result=integrate_chess_engine_input.verification_result
+    )
+    
+    # Review test results to identify documentation priorities
+    test_analysis: dict = analyze_test_results(
+        test_passed=test_chess_application_input.test_passed,
+        failed_tests=test_chess_application_input.failed_test_names,
+        bug_count=test_chess_application_input.bug_count,
+        test_summary=test_chess_application_input.test_summary
+    )
+    
+    # Create user manual outline with standard sections
+    manual_outline: List[str] = create_user_manual_outline(
+        engine_features=engine_analysis,
+        test_insights=test_analysis
+    )
+    
+    # Write detailed content for each section of the user manual
+    manual_content: dict = write_user_manual_content(
+        outline=manual_outline,
+        engine_info=engine_analysis,
+        test_info=test_analysis
+    )
+    
+    # Generate API documentation with endpoints and methods
+    api_documentation: dict = create_api_documentation(
+        chess_engine=integrate_chess_engine_input.chess_engine_used,
+        engine_features=engine_analysis
+    )
+    
+    # Extract API endpoints list from documentation
+    api_endpoints_list: List[str] = extract_api_endpoints(api_docs=api_documentation)
+    
+    # Review and revise documentation for accuracy and completeness
+    review_results: dict = review_documentation(
+        manual_content=manual_content,
+        api_docs=api_documentation,
+        engine_analysis=engine_analysis
+    )
+    
+    # Generate version identifiers for documentation
+    manual_version: str = generate_version_identifier(doc_type="user_manual")
+    api_version: str = generate_version_identifier(doc_type="api_documentation")
+    
+    # Publish documentation to accessible format
+    publication_status: dict = publish_documentation(
+        manual_content=manual_content,
+        api_docs=api_documentation,
+        manual_version=manual_version,
+        api_version=api_version
+    )
+    
+    # Determine completion status based on review and publication
+    is_manual_complete: bool = review_results.get("manual_complete", False) and publication_status.get("manual_published", False)
+    is_api_documented: bool = review_results.get("api_complete", False) and publication_status.get("api_published", False)
+    
     return DocumentChessApplicationOutput(
-        user_manual_sections=[],
-        api_endpoints=[],
-        manual_version="",
-        api_version="",
-        is_manual_complete=False,
-        is_api_documented=False,
+        user_manual_sections=manual_outline,
+        api_endpoints=api_endpoints_list,
+        manual_version=manual_version,
+        api_version=api_version,
+        is_manual_complete=is_manual_complete,
+        is_api_documented=is_api_documented
     )

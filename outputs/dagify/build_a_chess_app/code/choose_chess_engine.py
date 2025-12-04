@@ -71,12 +71,43 @@ def choose_chess_engine(gather_user_requirements_input: GatherUserRequirementsOu
     Returns:
         ChooseChessEngineOutput: Object containing outputs for this node.
     """
-    # TODO: Implement this function
-
-    # Return stub output with placeholder values
+    # Research and identify potential chess engines that meet user requirements
+    potential_engines: List[str] = research_chess_engines(
+        required_features=gather_user_requirements_input.required_features,
+        feature_priorities=gather_user_requirements_input.feature_priorities
+    )
+    
+    # Evaluate features and performance of each potential chess engine
+    engine_evaluations: List[dict] = evaluate_engine_performance(
+        engines=potential_engines,
+        required_features=gather_user_requirements_input.required_features
+    )
+    
+    # Select the best chess engine based on evaluation results
+    best_engine: str = select_best_engine(
+        evaluations=engine_evaluations,
+        feature_priorities=gather_user_requirements_input.feature_priorities
+    )
+    
+    # Verify that the chosen engine supports the required features
+    feature_support_verification: List[bool] = verify_engine_features(
+        engine_name=best_engine,
+        required_features=gather_user_requirements_input.required_features
+    )
+    
+    # Get key features supported by the chosen engine
+    engine_key_features: List[str] = get_engine_key_features(
+        engine_name=best_engine
+    )
+    
+    # Retrieve the Elo rating of the chosen chess engine
+    engine_elo_rating: int = get_engine_elo_rating(
+        engine_name=best_engine
+    )
+    
     return ChooseChessEngineOutput(
-        chosen_engine="",
-        key_features=[],
-        supported_features=[],
-        engine_rating=0,
+        chosen_engine=best_engine,
+        key_features=engine_key_features,
+        supported_features=feature_support_verification,
+        engine_rating=engine_elo_rating
     )

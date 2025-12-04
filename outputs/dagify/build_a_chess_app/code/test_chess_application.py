@@ -99,13 +99,54 @@ def test_chess_application(integrate_chess_engine_input: IntegrateChessEngineOut
     Returns:
         TestChessApplicationOutput: Object containing outputs for this node.
     """
-    # TODO: Implement this function
-
-    # Return stub output with placeholder values
+    # Develop comprehensive test plan covering all aspects of chess application
+    test_plan: List[str] = create_comprehensive_test_plan(
+        engine_status=integrate_chess_engine_input.integration_status,
+        ui_components=add_user_interface_input.ui_components
+    )
+    
+    # Create test cases for each scenario including valid and invalid inputs
+    test_cases: List[dict] = generate_test_cases(
+        test_plan=test_plan,
+        engine_name=integrate_chess_engine_input.chess_engine_used,
+        ui_validation=add_user_interface_input.validation_passed
+    )
+    
+    # Execute test cases and record results
+    test_results: dict = execute_test_cases(
+        test_cases=test_cases,
+        engine_verification=integrate_chess_engine_input.verification_result
+    )
+    
+    # Analyze test results to identify bugs and inconsistencies
+    bug_analysis: dict = analyze_test_results(
+        results=test_results,
+        engine_issues=integrate_chess_engine_input.issues_encountered
+    )
+    
+    # Fix identified bugs and re-run failed tests
+    fixed_results: dict = fix_bugs_and_retest(
+        bug_analysis=bug_analysis,
+        original_results=test_results
+    )
+    
+    # Generate test summary report
+    summary_report: str = generate_test_summary_report(
+        results=fixed_results,
+        bugs_found=bug_analysis,
+        ui_accessibility_score=add_user_interface_input.accessibility_score
+    )
+    
+    # Extract final metrics for output
+    final_test_status: bool = determine_overall_test_status(results=fixed_results)
+    total_tests: int = len(test_cases)
+    failed_tests: List[str] = extract_failed_test_names(results=fixed_results)
+    total_bugs: int = count_total_bugs(bug_analysis=bug_analysis)
+    
     return TestChessApplicationOutput(
-        test_passed=False,
-        total_tests_run=0,
-        failed_test_names=[],
-        bug_count=0,
-        test_summary="",
+        test_passed=final_test_status,
+        total_tests_run=total_tests,
+        failed_test_names=failed_tests,
+        bug_count=total_bugs,
+        test_summary=summary_report
     )

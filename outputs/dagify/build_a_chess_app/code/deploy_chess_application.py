@@ -107,13 +107,58 @@ def deploy_chess_application(document_chess_application_input: DocumentChessAppl
     Returns:
         DeployChessApplicationOutput: Object containing outputs for this node.
     """
-    # TODO: Implement this function
-
-    # Return stub output with placeholder values
+    # Verify testing and documentation readiness
+    deployment_readiness: bool = validate_application_readiness(
+        test_results=test_chess_application_input, 
+        documentation=document_chess_application_input
+    )
+    
+    if not deployment_readiness:
+        return DeployChessApplicationOutput(
+            deployment_status=False,
+            platform="",
+            application_id="",
+            test_results=False,
+            documentation_url=""
+        )
+    
+    # Select target platform
+    selected_platform: str = select_deployment_platform(
+        app_requirements=kwargs.get('requirements', {}),
+        user_demographics=kwargs.get('user_base', {})
+    )
+    
+    # Configure application for deployment
+    deployment_config: dict = configure_application_for_platform(
+        platform=selected_platform,
+        app_metadata=kwargs.get('app_config', {})
+    )
+    
+    # Deploy application to platform
+    deployment_result: dict = deploy_to_platform(
+        platform=selected_platform,
+        config=deployment_config,
+        deployment_method="containerized"
+    )
+    
+    # Run post-deployment tests
+    post_deploy_test_results: bool = run_post_deployment_tests(
+        platform=selected_platform,
+        application_id=deployment_result.get('app_id', ''),
+        test_suite="production"
+    )
+    
+    # Update documentation URL for deployed application
+    updated_documentation_url: str = update_documentation_url(
+        base_documentation=document_chess_application_input,
+        deployed_app_id=deployment_result.get('app_id', ''),
+        platform=selected_platform
+    )
+    
     return DeployChessApplicationOutput(
-        deployment_status=False,
-        platform="",
-        application_id="",
-        test_results=False,
-        documentation_url="",
+        deployment_status=deployment_result.get('success', False),
+        platform=selected_platform,
+        application_id=deployment_result.get('app_id', ''),
+        test_results=post_deploy_test_results,
+        documentation_url=updated_documentation_url
     )
