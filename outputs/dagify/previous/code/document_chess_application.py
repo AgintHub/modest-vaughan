@@ -1,17 +1,3 @@
-from ._document_chess_application.analyze_chess_engine_features import analyze_chess_engine_features
-from ._document_chess_application.analyze_test_results import analyze_test_results
-from ._document_chess_application.create_user_manual_outline import create_user_manual_outline
-from ._document_chess_application.write_user_manual_content import write_user_manual_content
-from ._document_chess_application.create_api_documentation import create_api_documentation
-from ._document_chess_application.extract_api_endpoints import extract_api_endpoints
-from ._document_chess_application.review_documentation import review_documentation
-from ._document_chess_application.generate_version_identifier import generate_version_identifier
-from ._document_chess_application.publish_documentation import publish_documentation
-
-from pydantic import BaseModel, Field
-from typing import List
-
-
 # -- PRD --
 # 1. BULLET: Review the output from the integrate_chess_engine node to understand the
 #   chess engine used and its key features.
@@ -83,6 +69,8 @@ from typing import List
 #           Docs, to publish and share the documentation.
 # -- END PRD --
 
+from pydantic import BaseModel, Field
+from typing import List
 
 
 class TestChessApplicationOutput(BaseModel):

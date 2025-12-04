@@ -1,19 +1,3 @@
-from ._gather_user_requirements.collect_chess_app_reviews import collect_chess_app_reviews
-from ._gather_user_requirements.collect_user_feedback import collect_user_feedback
-from ._gather_user_requirements.apply_nlp_processing import apply_nlp_processing
-from ._gather_user_requirements.perform_sentiment_analysis import perform_sentiment_analysis
-from ._gather_user_requirements.analyze_user_feedback import analyze_user_feedback
-from ._gather_user_requirements.extract_features_from_analysis import extract_features_from_analysis
-from ._gather_user_requirements.categorize_features import categorize_features
-from ._gather_user_requirements.apply_prioritization_matrix import apply_prioritization_matrix
-from ._gather_user_requirements.select_top_features import select_top_features
-from ._gather_user_requirements.assign_feature_priorities import assign_feature_priorities
-from ._gather_user_requirements.summarize_user_feedback import summarize_user_feedback
-
-from pydantic import BaseModel, Field
-from typing import List
-
-
 # -- PRD --
 # 1. BULLET: Conduct a thorough analysis of online reviews and user feedback on existing
 #   chess applications to identify common complaints and desired features.
@@ -62,6 +46,8 @@ from typing import List
 #           themes and insights.
 # -- END PRD --
 
+from pydantic import BaseModel, Field
+from typing import List
 
 
 class GatherUserRequirementsOutput(BaseModel):

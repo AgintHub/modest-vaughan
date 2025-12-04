@@ -1,16 +1,3 @@
-from ._implement_chess_rules.review_official_chess_rules import review_official_chess_rules
-from ._implement_chess_rules.implement_castling_rules import implement_castling_rules
-from ._implement_chess_rules.implement_pawn_promotion_rules import implement_pawn_promotion_rules
-from ._implement_chess_rules.implement_checkmate_conditions import implement_checkmate_conditions
-from ._implement_chess_rules.verify_chess_implementation import verify_chess_implementation
-from ._implement_chess_rules.compile_supported_moves import compile_supported_moves
-from ._implement_chess_rules.extract_checkmate_conditions import extract_checkmate_conditions
-from ._implement_chess_rules.generate_implementation_notes import generate_implementation_notes
-
-from pydantic import BaseModel, Field
-from typing import List
-
-
 # -- PRD --
 # 1. BULLET: Review the official chess rules and regulations to ensure understanding of
 #   the requirements.
@@ -55,6 +42,8 @@ from typing import List
 #   Method: Consult a chess reference guide and test the implementation.
 # -- END PRD --
 
+from pydantic import BaseModel, Field
+from typing import List
 
 
 class ChooseChessEngineOutput(BaseModel):

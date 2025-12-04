@@ -1,14 +1,3 @@
-from ._deploy_chess_application.validate_application_readiness import validate_application_readiness
-from ._deploy_chess_application.select_deployment_platform import select_deployment_platform
-from ._deploy_chess_application.configure_application_for_platform import configure_application_for_platform
-from ._deploy_chess_application.deploy_to_platform import deploy_to_platform
-from ._deploy_chess_application.run_post_deployment_tests import run_post_deployment_tests
-from ._deploy_chess_application.update_documentation_url import update_documentation_url
-
-from pydantic import BaseModel, Field
-from typing import List
-
-
 # -- PRD --
 # 1. BULLET: Verify that the chess application has been successfully tested and documented
 #   by checking the output of the 'test_chess_application' and
@@ -75,6 +64,8 @@ from typing import List
 #           to point to the deployed application's documentation.
 # -- END PRD --
 
+from pydantic import BaseModel, Field
+from typing import List
 
 
 class DocumentChessApplicationOutput(BaseModel):
