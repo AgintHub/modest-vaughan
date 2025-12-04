@@ -1,8 +1,5 @@
-dag_type: plain_text
-description: A fully detailed, highly concurrent workflow that builds, trains, and
-  evaluates the CLIFF continual‑learning framework for 2D material flake layer classification,
-  including data preparation, model architecture, material‑specific prompt learning,
-  memory replay, knowledge distillation, baseline comparisons, and result reporting.
+dag_type: typed
+description: Generated workflow from UI.
 name: cliff_continual_learning_workflow
 nodes:
   collect_new_material_datasets:
@@ -12,6 +9,35 @@ nodes:
     name: collect_new_material_datasets
     nodes_depended_on: []
     nodes_dependent_on: []
+    output_structure:
+    - description: Names of the new 2D materials for which datasets are collected
+        (e.g., MoS2, WS2, h‑BN).
+      key: materials
+      type: List[str]
+    - description: Brief description of the acquisition procedure for each material
+        (e.g., microscope settings, substrate preparation).
+      key: collection_methods
+      type: List[str]
+    - description: Annotation protocol for each material, specifying label categories
+        such as layer count, defects, and image quality criteria.
+      key: annotation_guidelines
+      type: List[str]
+    - description: Filesystem or cloud directory path where the labeled image set
+        for each material is saved.
+      key: storage_paths
+      type: List[str]
+    - description: Recommended train/validation/test split for each material expressed
+        as a string (e.g., "70/15/15").
+      key: split_ratios
+      type: List[str]
+    - description: Number of images collected for each material after filtering and
+        quality control.
+      key: total_image_counts
+      type: List[int]
+    - description: Flag indicating whether all datasets have been collected, annotated,
+        split, and stored correctly.
+      key: is_dataset_ready
+      type: bool
     prompt: Outline how to collect, annotate, and store separate labeled image sets
       for at least three new 2D materials (e.g., MoS2, WS2, h‑BN). Include data‑split
       recommendations.
@@ -22,6 +48,44 @@ nodes:
     name: collect_reference_material_dataset
     nodes_depended_on: []
     nodes_dependent_on: []
+    output_structure:
+    - description: A short identifier for the collected dataset (e.g., "graphene_optical_dataset").
+      key: dataset_name
+      type: str
+    - description: The reference 2D material that the dataset represents (e.g., "graphene").
+      key: material
+      type: str
+    - description: List of data sources or repositories from which images were obtained
+        (URLs, lab collection names, etc.).
+      key: source_list
+      type: List[str]
+    - description: Ordered list of actions required to acquire the raw microscopy
+        images (e.g., instrument settings, capture protocol).
+      key: acquisition_steps
+      type: List[str]
+    - description: Steps to check image quality, correctness of labels, and consistency
+        (e.g., visual inspection, checksum validation).
+      key: verification_steps
+      type: List[str]
+    - description: Required annotation fields for each image, such as "layer_count",
+        "flake_id", or "defect_label".
+      key: annotation_requirements
+      type: List[str]
+    - description: Chosen storage format for the labeled dataset (e.g., "TFRecord",
+        "HDF5", "directory with CSV metadata").
+      key: storage_format
+      type: str
+    - description: Filesystem path or cloud bucket location where the finalized dataset
+        is stored.
+      key: dataset_path
+      type: str
+    - description: Total number of labeled images collected in the dataset.
+      key: total_samples
+      type: int
+    - description: Flag indicating whether the dataset has passed verification and
+        is ready to be used for backbone pre‑training.
+      key: is_ready_for_pretraining
+      type: bool
     prompt: Provide a step‑by‑step plan to acquire, verify, and store a labeled dataset
       of optical microscopy images for a chosen reference material (e.g., graphene).
       List sources, required annotations (layer count), and storage format.
@@ -36,6 +100,50 @@ nodes:
     - train_prompt_based_baseline
     - split_datasets
     nodes_dependent_on: []
+    output_structure:
+    - description: List of model identifiers included in the evaluation (e.g., ['CLIFF',
+        'NaiveFineTuning', 'PromptBaseline']).
+      key: models
+      type: List[str]
+    - description: List of material names for which accuracy is reported, in the same
+        order as the per‑material accuracy lists.
+      key: materials
+      type: List[str]
+    - description: Top‑1 accuracy of the CLIFF model on each material's test set,
+        ordered according to the 'materials' list.
+      key: cliff_per_material_accuracy
+      type: List[float]
+    - description: Top‑1 accuracy of the naive fine‑tuning baseline on each material's
+        test set, ordered according to the 'materials' list.
+      key: naive_fine_tuning_per_material_accuracy
+      type: List[float]
+    - description: Top‑1 accuracy of the prompt‑only baseline on each material's test
+        set, ordered according to the 'materials' list.
+      key: prompt_baseline_per_material_accuracy
+      type: List[float]
+    - description: Mean accuracy of the CLIFF model across all materials.
+      key: cliff_mean_accuracy
+      type: float
+    - description: Mean accuracy of the naive fine‑tuning baseline across all materials.
+      key: naive_fine_tuning_mean_accuracy
+      type: float
+    - description: Mean accuracy of the prompt‑only baseline across all materials.
+      key: prompt_baseline_mean_accuracy
+      type: float
+    - description: 'Forgetting metric for CLIFF: average drop in accuracy on previously
+        learned materials after learning later ones.'
+      key: cliff_forgetting
+      type: float
+    - description: Forgetting metric for the naive fine‑tuning baseline.
+      key: naive_fine_tuning_forgetting
+      type: float
+    - description: Forgetting metric for the prompt‑only baseline.
+      key: prompt_baseline_forgetting
+      type: float
+    - description: A JSON‑formatted string containing all of the above fields, suitable
+        for downstream consumption.
+      key: summary_json
+      type: str
     prompt: Write a Python‑style function that loads each model's test results, calculates
       per‑material accuracy, mean accuracy, and forgetting (accuracy loss on earlier
       materials). Output a JSON summary.
@@ -49,6 +157,39 @@ nodes:
     - implement_prompt_pool_structure
     - implement_delta_head
     nodes_dependent_on: []
+    output_structure:
+    - description: Optimizer used for the initial pre‑training phase (e.g., "AdamW").
+      key: base_optimizer
+      type: str
+    - description: Learning rate for the backbone and base head during pre‑training.
+      key: base_learning_rate
+      type: float
+    - description: Batch size used for the pre‑training dataset.
+      key: base_batch_size
+      type: int
+    - description: Number of training epochs for the base pre‑training phase.
+      key: base_epochs
+      type: int
+    - description: Learning rate for updating material‑specific prompt vectors during
+        incremental training.
+      key: incremental_prompt_learning_rate
+      type: float
+    - description: Learning rate for updating the delta head during incremental training.
+      key: incremental_delta_learning_rate
+      type: float
+    - description: Batch size used for each incremental material training session.
+      key: incremental_batch_size
+      type: int
+    - description: Number of epochs for each incremental material training phase.
+      key: incremental_epochs
+      type: int
+    - description: Ratio of replay (memory) samples to new material samples (e.g.,
+        "1:3").
+      key: replay_ratio
+      type: str
+    - description: Brief explanation of why each hyper‑parameter choice was made.
+      key: rationale
+      type: str
     prompt: List concrete hyper‑parameters (e.g., AdamW lr=1e‑4, batch=64, epochs=30
       for base; lr=5e‑5 for prompts/delta, replay ratio 1:3). Explain rationale.
   define_knowledge_distillation_loss:
@@ -59,6 +200,22 @@ nodes:
     nodes_depended_on:
     - set_up_memory_replay_buffer
     nodes_dependent_on: []
+    output_structure:
+    - description: Mathematical expression of the combined loss function.
+      key: loss_expression
+      type: str
+    - description: Type of classification loss used (e.g., cross-entropy).
+      key: classification_loss_type
+      type: str
+    - description: Type of distillation loss used (e.g., KL-divergence).
+      key: distillation_loss_type
+      type: str
+    - description: Name of the weighting hyperparameter used in the loss function.
+      key: weighting_hyperparameter_name
+      type: str
+    - description: Proposed value of the weighting hyperparameter.
+      key: weighting_hyperparameter_value
+      type: float
     prompt: 'Write the mathematical expression for a combined loss: classification
       cross‑entropy on current material + KL‑divergence between current logits and
       stored base logits for replay samples. Include weighting hyper‑parameter.'
@@ -69,6 +226,17 @@ nodes:
     name: define_project_scope
     nodes_depended_on: []
     nodes_dependent_on: []
+    output_structure:
+    - description: The primary objective of the CLIFF project.
+      key: primary_objective
+      type: str
+    - description: List of evaluation metrics to be used (e.g., accuracy, forgetting).
+      key: evaluation_metrics
+      type: List[str]
+    - description: List of high-level constraints for the CLIFF framework (e.g., frozen
+        backbone).
+      key: high_level_constraints
+      type: List[str]
     prompt: Write a concise project scope for a continual‑learning system that classifies
       flake layers from optical microscopy images. Include primary objective, evaluation
       metrics (e.g., accuracy, forgetting), and high‑level constraints (e.g., frozen
@@ -81,6 +249,28 @@ nodes:
     nodes_depended_on:
     - define_project_scope
     nodes_dependent_on: []
+    output_structure:
+    - description: Name of the CNN backbone architecture (e.g., ResNet-50).
+      key: backbone_architecture
+      type: str
+    - description: List of layers in the backbone architecture, including their dimensions
+        to allow for recreating it.
+      key: backbone_layers
+      type: List[str]
+    - description: Description of the base classification head architecture (e.g.,
+        fully-connected layer).
+      key: base_head_architecture
+      type: str
+    - description: Input dimension to the base classification head.
+      key: base_head_input_dimension
+      type: int
+    - description: Output dimension of the base classification head (number of classes).
+      key: base_head_output_dimension
+      type: int
+    - description: Method used to initialize the weights of the backbone and base
+        head (e.g., Xavier, Kaiming).
+      key: initialization_strategy
+      type: str
     prompt: Propose a concrete backbone (e.g., ResNet‑50) and a base classification
       head (fully‑connected layer) suitable for flake‑layer classification. Include
       layer dimensions and initialization strategy.
@@ -93,6 +283,26 @@ nodes:
     - incremental_train_material_specific_components
     - split_datasets
     nodes_dependent_on: []
+    output_structure:
+    - description: Names or identifiers of the 2D materials evaluated (e.g., graphene,
+        MoS2, WS2, h‑BN).
+      key: material_names
+      type: List[str]
+    - description: Top‑1 accuracy for each material's test split, ordered correspondingly
+        to material_names.
+      key: material_accuracies
+      type: List[float]
+    - description: Mean of material_accuracies across all evaluated materials.
+      key: average_accuracy
+      type: float
+    - description: Overall forgetting calculated as the average drop in accuracy on
+        earlier materials after later materials have been learned.
+      key: forgetting_metric
+      type: float
+    - description: Human‑readable textual summary of the evaluation results, including
+        per‑material accuracies, average accuracy, and forgetting metric.
+      key: summary_report
+      type: str
     prompt: 'Describe how to evaluate the trained CLIFF model: compute top‑1 accuracy
       for each material''s test set, compute average accuracy across materials, and
       calculate forgetting as the drop in accuracy on earlier materials after learning
@@ -105,6 +315,23 @@ nodes:
     nodes_depended_on:
     - train_base_model_on_reference
     nodes_dependent_on: []
+    output_structure:
+    - description: Overall status of the freezing operation (e.g., "success" or an
+        error message).
+      key: operation_status
+      type: str
+    - description: Names or identifiers of all backbone and base‑head parameters that
+        were set to requires_grad=False.
+      key: frozen_parameters
+      type: List[str]
+    - description: Names or identifiers of parameters that remain trainable after
+        freezing (typically prompts and delta‑head parameters).
+      key: trainable_parameters
+      type: List[str]
+    - description: Result of the verification step confirming that only the intended
+        components are trainable.
+      key: verification_passed
+      type: bool
     prompt: Explain how to set requires_grad=False for backbone and base head tensors
       in the chosen deep‑learning framework, and verify that only prompts and delta
       head are trainable.
@@ -116,6 +343,28 @@ nodes:
     nodes_depended_on:
     - compute_accuracy_and_forgetting_metrics
     nodes_dependent_on: []
+    output_structure:
+    - description: Markdown‑formatted table summarizing the comparison of models (rows)
+        across overall accuracy, average forgetting, and per‑material accuracies.
+      key: markdown_table
+      type: str
+    - description: Names of the evaluated models in the same order as rows (e.g.,
+        "CLIFF", "Naive Fine‑Tuning", "Prompt‑Only").
+      key: model_names
+      type: List[str]
+    - description: Overall accuracy for each model, corresponding to the order in
+        `model_names`.
+      key: overall_accuracies
+      type: List[float]
+    - description: Average forgetting metric for each model, corresponding to the
+        order in `model_names`.
+      key: average_forgettings
+      type: List[float]
+    - description: Flattened list of per‑material accuracies for all models. The list
+        is ordered first by model (following `model_names`) and, within each model,
+        by material (up to three materials).
+      key: per_material_accuracies
+      type: List[float]
     prompt: Produce a markdown table with rows for each model and columns for overall
       accuracy, average forgetting, and per‑material accuracies (list up to three
       materials).
@@ -127,6 +376,21 @@ nodes:
     nodes_depended_on:
     - implement_prompt_pool_structure
     nodes_dependent_on: []
+    output_structure:
+    - description: Pseudo‑code implementation of the cosine‑similarity gating mechanism.
+      key: pseudo_code
+      type: str
+    - description: Cosine similarity scores between the backbone output feature vector
+        and each prompt embedding.
+      key: similarity_scores
+      type: List[float]
+    - description: Softmax‑normalized weights derived from the similarity scores.
+      key: softmax_weights
+      type: List[float]
+    - description: Aggregated prompt vector obtained by the weighted sum of prompt
+        embeddings using the softmax weights.
+      key: weighted_prompt_vector
+      type: List[float]
     prompt: Write pseudo‑code for a cosine‑similarity gate that computes similarity
       scores between the backbone output and each prompt embedding, applies softmax,
       and produces a weighted prompt aggregation.
@@ -138,6 +402,23 @@ nodes:
     nodes_depended_on:
     - design_backbone_and_base_head
     nodes_dependent_on: []
+    output_structure:
+    - description: Description of the delta head architecture (e.g., two-layer MLP).
+      key: delta_head_architecture
+      type: str
+    - description: The input size of the delta head.
+      key: delta_head_input_size
+      type: int
+    - description: The output size of the delta head (should match the base head's
+        output size).
+      key: delta_head_output_size
+      type: int
+    - description: List of layer sizes for each layer in the delta head.
+      key: delta_head_layer_sizes
+      type: List[int]
+    - description: List of activation functions used in each layer of the delta head.
+      key: delta_head_activation_functions
+      type: List[str]
     prompt: Specify the architecture of the delta head (e.g., two‑layer MLP) that
       takes gated features as input and outputs corrections to the base head logits.
       Provide layer sizes and activation functions.
@@ -149,6 +430,34 @@ nodes:
     nodes_depended_on:
     - design_backbone_and_base_head
     nodes_dependent_on: []
+    output_structure:
+    - description: Identifier used in code to store the prompt pool (e.g., `material_prompts`).
+      key: prompt_pool_variable_name
+      type: str
+    - description: Dimensionality D of each learnable prompt vector.
+      key: prompt_dimension
+      type: int
+    - description: Total count of distinct material‑specific prompts in the pool.
+      key: number_of_materials
+      type: int
+    - description: List of material identifiers (e.g., ["graphene", "MoS2", "WS2"]).
+      key: material_ids
+      type: List[str]
+    - description: Description of how the prompt vectors are initialized (e.g., random
+        normal with std=0.02).
+      key: initialization_method
+      type: str
+    - description: Explanation of how prompts are merged with backbone outputs (e.g.,
+        prepend to token sequence or added to feature map).
+      key: integration_method
+      type: str
+    - description: Flag indicating that prompts are learnable parameters during training.
+      key: is_trainable
+      type: bool
+    - description: A short pseudo‑code snippet showing creation of the prompt pool
+        and its use in a forward pass.
+      key: example_code_snippet
+      type: str
     prompt: 'Describe how to implement a prompt pool: each prompt is a learnable vector
       of size D, indexed by material ID. Explain integration with the backbone feature
       map (e.g., prepend to token sequence).'
@@ -166,6 +475,23 @@ nodes:
     - define_knowledge_distillation_loss
     - configure_training_hyperparameters
     nodes_dependent_on: []
+    output_structure:
+    - description: Indicates whether the incremental training for all materials has
+        been completed.
+      key: training_completed
+      type: bool
+    - description: Accuracy achieved on the last material trained.
+      key: last_material_accuracy
+      type: float
+    - description: List of the trained prompt embeddings.
+      key: prompt_embeddings
+      type: List[float]
+    - description: List of the trained delta head weights.
+      key: delta_head_weights
+      type: List[float]
+    - description: Percentage of the replay buffer that is currently in use.
+      key: replay_buffer_usage
+      type: float
     prompt: 'Write a step‑by‑step incremental training procedure: load new material
       training split, sample replay exemplars, compute gated features, forward through
       delta head, compute combined loss, back‑propagate only on prompts and delta
@@ -179,6 +505,33 @@ nodes:
     - collect_reference_material_dataset
     - collect_new_material_datasets
     nodes_dependent_on: []
+    output_structure:
+    - description: Path to the root directory where preprocessed images are saved,
+        organized by material and data split.
+      key: processed_images_dir
+      type: str
+    - description: List of file paths for every image that was successfully preprocessed.
+      key: processed_image_paths
+      type: List[str]
+    - description: Total count of images that were processed without errors.
+      key: total_images_processed
+      type: int
+    - description: Target width (in pixels) to which all images were resized.
+      key: image_width
+      type: int
+    - description: Target height (in pixels) to which all images were resized.
+      key: image_height
+      type: int
+    - description: Mean value used for pixel‑value normalization (e.g., 0.5).
+      key: normalization_mean
+      type: float
+    - description: Standard deviation used for pixel‑value normalization (e.g., 0.5).
+      key: normalization_std
+      type: float
+    - description: Flag indicating whether augmentation operations (rotation, flip,
+        brightness) were applied during preprocessing.
+      key: augmentation_enabled
+      type: bool
     prompt: Write a script‑style description that loads all collected images, normalizes
       pixel values, resizes to a common resolution, and optionally creates augmentation
       pipelines (rotation, flip, brightness). Describe output directory structure.
@@ -190,6 +543,19 @@ nodes:
     nodes_depended_on:
     - compute_accuracy_and_forgetting_metrics
     nodes_dependent_on: []
+    output_structure:
+    - description: Filepath to the accuracy vs material order plot.
+      key: accuracy_plot_filepath
+      type: str
+    - description: Filepath to the forgetting magnitude per material plot.
+      key: forgetting_curve_filepath
+      type: str
+    - description: Caption for the accuracy plot.
+      key: accuracy_plot_caption
+      type: str
+    - description: Caption for the forgetting curve plot.
+      key: forgetting_curve_caption
+      type: str
     prompt: Describe how to plot (a) accuracy over the sequence of learned materials
       for each method, and (b) forgetting magnitude per material. Include matplotlib
       code snippets and expected figure captions.
@@ -201,6 +567,30 @@ nodes:
     nodes_depended_on:
     - split_datasets
     nodes_dependent_on: []
+    output_structure:
+    - description: Filesystem path where the replay buffer files are stored.
+      key: buffer_directory
+      type: str
+    - description: Number of exemplar images retained for each class (layer count)
+        in the buffer.
+      key: exemplars_per_class
+      type: int
+    - description: Total number of exemplar samples stored across all classes and
+        materials.
+      key: total_exemplars
+      type: int
+    - description: List of integer identifiers for each class (e.g., layer numbers)
+        that have exemplars in the buffer.
+      key: class_ids
+      type: List[int]
+    - description: List of file paths (or relative URIs) for each exemplar image stored
+        in the buffer.
+      key: exemplar_file_paths
+      type: List[str]
+    - description: Brief description of the API used to query the buffer during training
+        (e.g., function signature, input arguments, and returned data format).
+      key: retrieval_api_description
+      type: str
     prompt: 'Explain how to construct a memory replay buffer: number of exemplars
       per class, sampling strategy, storage format, and retrieval API for training
       loops.'
@@ -212,6 +602,27 @@ nodes:
     nodes_depended_on:
     - preprocess_images
     nodes_dependent_on: []
+    output_structure:
+    - description: List of material identifiers (e.g., "graphene", "MoS2", "WS2",
+        "h-BN").
+      key: material_names
+      type: List[str]
+    - description: List of file paths to JSON files that contain the training split
+        file‑paths for each material, ordered correspondingly to material_names.
+      key: train_split_json_paths
+      type: List[str]
+    - description: List of file paths to JSON files that contain the validation split
+        file‑paths for each material, ordered correspondingly to material_names.
+      key: validation_split_json_paths
+      type: List[str]
+    - description: List of file paths to JSON files that contain the test split file‑paths
+        for each material, ordered correspondingly to material_names.
+      key: test_split_json_paths
+      type: List[str]
+    - description: Human‑readable description of the split ratios used (e.g., "70%
+        train / 15% validation / 15% test").
+      key: split_ratio_description
+      type: str
     prompt: Detail a reproducible splitting procedure (e.g., stratified 70/15/15)
       for each material’s preprocessed dataset. Output JSON files listing file paths
       for each split.
@@ -225,6 +636,22 @@ nodes:
     - design_backbone_and_base_head
     - configure_training_hyperparameters
     nodes_dependent_on: []
+    output_structure:
+    - description: File path to the saved weights of the trained base model.
+      key: base_model_weights_path
+      type: str
+    - description: Number of epochs the base model was trained for.
+      key: base_model_training_epochs
+      type: int
+    - description: The final validation accuracy achieved by the base model.
+      key: base_model_validation_accuracy
+      type: float
+    - description: Boolean indicating whether the backbone parameters are frozen.
+      key: backbone_frozen_status
+      type: bool
+    - description: Boolean indicating whether the base head parameters are frozen.
+      key: base_head_frozen_status
+      type: bool
     prompt: 'Provide a concise training loop description for the base model: load
       reference training split, train for N epochs, monitor validation accuracy, then
       save and freeze weights.'
@@ -238,6 +665,25 @@ nodes:
     - split_datasets
     - configure_training_hyperparameters
     nodes_dependent_on: []
+    output_structure:
+    - description: File paths to the saved model checkpoints after fine‑tuning each
+        material in sequence.
+      key: trained_checkpoints
+      type: List[str]
+    - description: Ordered list of material identifiers that were fine‑tuned.
+      key: materials_fine_tuned
+      type: List[str]
+    - description: Indicates whether the fine‑tuning process completed without errors.
+      key: training_success
+      type: bool
+    - description: Number of training epochs used for each material (should match
+        the hyper‑parameter setting).
+      key: epochs_per_material
+      type: List[int]
+    - description: Validation accuracy of the final model on the last material's validation
+        set.
+      key: final_validation_accuracy
+      type: float
     prompt: Provide a training script outline that, for each new material, unfreezes
       all parameters, trains on the material's data, and proceeds to the next material
       without replay or prompts.
@@ -252,6 +698,20 @@ nodes:
     - split_datasets
     - configure_training_hyperparameters
     nodes_dependent_on: []
+    output_structure:
+    - description: Indicates if the prompt training for the baseline model was completed
+        successfully.
+      key: prompt_training_status
+      type: bool
+    - description: Paths to the trained prompt vectors for each material.
+      key: prompt_vectors_trained
+      type: List[str]
+    - description: Validation accuracy achieved on each material during prompt training.
+      key: validation_accuracy_per_material
+      type: List[float]
+    - description: The number of training epochs completed.
+      key: training_epochs_completed
+      type: int
     prompt: Sketch a training loop where only the prompt vectors are updated for each
       new material while the backbone stays frozen and no delta head or replay is
       used.
@@ -264,6 +724,30 @@ nodes:
     - generate_comparative_results_table
     - produce_visualizations
     nodes_dependent_on: []
+    output_structure:
+    - description: A brief summary of the research.
+      key: abstract
+      type: str
+    - description: An overview of the problem and the proposed solution.
+      key: introduction
+      type: str
+    - description: A detailed explanation of the CLIFF framework.
+      key: method
+      type: str
+    - description: Description of the experimental setup, datasets, and evaluation
+        metrics.
+      key: experiments
+      type: str
+    - description: Quantitative results, including tables and figures, comparing CLIFF
+        with baselines.
+      key: results
+      type: str
+    - description: Analysis and interpretation of the obtained results.
+      key: discussion
+      type: str
+    - description: Summary of the main findings and future work suggestions.
+      key: conclusion
+      type: str
     prompt: Draft a structured report (Abstract, Introduction, Method, Experiments,
       Results, Discussion, Conclusion) that integrates the generated tables, figures,
       and quantitative findings about CLIFF versus baselines.
